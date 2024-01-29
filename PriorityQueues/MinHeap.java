@@ -1,7 +1,5 @@
 package PriorityQueues;
-
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class MinHeap {
   private int[] heap;
@@ -14,9 +12,6 @@ public class MinHeap {
   }
 
   public void offer(int val) {
-    if (size == heap.length) {
-      heap = Arrays.copyOf(heap, size * 2);
-    }
       heap[size] = val;
       bubbleUp(size);
       size++;
@@ -26,9 +21,6 @@ public class MinHeap {
   }
 
   public int poll() {
-      if (size == 0) {
-          throw new NoSuchElementException("Heap is empty");
-      }
       int min = heap[0];
       heap[0] = heap[size - 1];
       size--;
@@ -37,11 +29,9 @@ public class MinHeap {
   }
 
   private void bubbleUp(int i) {
-    int parent = parent(i);
-    while (i > 0 && heap[i] < heap[parent]) {
-      swap(i, parent);
-      i = parent;
-      parent = parent(i);
+    while (i > 0 && heap[i] < heap[parent(i)]) {
+      swap(i, parent(i));
+      i = parent(i);
     }
   }
 
