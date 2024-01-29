@@ -1,29 +1,39 @@
 package PriorityQueues;
 
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
 public class MinHeap {
   private int[] heap;
   private int size;
-
-  public MinHeap(int capacity) {
-    heap = new int[capacity];
+  private int k;
+  public MinHeap(int k) {
+    this.k = k;
     size = 0;
+    heap = new int[k+1];
   }
 
   public void offer(int val) {
     if (size == heap.length) {
-      poll();
+      heap = Arrays.copyOf(heap, size * 2);
     }
-    heap[size] = val;
-    bubbleUp(size);
-    size++;
+      heap[size] = val;
+      bubbleUp(size);
+      size++;
+      if (size > this.k) {
+        poll();
+      }
   }
 
   public int poll() {
-    int min = heap[0];
-    heap[0] = heap[size - 1];
-    size --;
-    bubbleDown(0);
-    return min;
+      if (size == 0) {
+          throw new NoSuchElementException("Heap is empty");
+      }
+      int min = heap[0];
+      heap[0] = heap[size - 1];
+      size--;
+      bubbleDown(0);
+      return min;
   }
 
   private void bubbleUp(int i) {
@@ -31,6 +41,7 @@ public class MinHeap {
     while (i > 0 && heap[i] < heap[parent]) {
       swap(i, parent);
       i = parent;
+      parent = parent(i);
     }
   }
 
@@ -49,6 +60,10 @@ public class MinHeap {
       bubbleDown(smallest);
     }
   }
+
+  public int[] getHeap() {
+    return Arrays.copyOf(heap, size);
+}
 
   private int parent(int i) { return (i - 1) / 2; }
   private int left(int i) { return 2 * i + 1; }
